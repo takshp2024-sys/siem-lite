@@ -58,6 +58,9 @@ flowchart LR
     UI3 --> API
 ```
 
+<img width="1901" height="911" alt="image" src="https://github.com/user-attachments/assets/3d873f10-763a-4612-af1b-f1f3c7508b0d" />
+
+
 *(Rendered directly by GitHub — no external image needed. See [`docs/architecture-notes.md`](docs/architecture-notes.md) for a deeper breakdown of each stage, and drop a static export here if you want a non-Mermaid version for a slide deck.)*
 
 ---
