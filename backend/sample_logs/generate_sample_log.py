@@ -4,12 +4,18 @@ Generates a synthetic /var/log/auth.log-style file with:
   - one embedded SSH brute-force burst (>5 failures in <5 min from one IP)
   - one off-hours successful login (03:xx) from an unfamiliar IP
 
-Run: python generate_sample_log.py > sample_auth.log
+Run: python generate_sample_log.py
+     (writes sample_auth.log in the current directory, UTF-8, no shell
+     redirection needed — avoids the classic Windows PowerShell issue where
+     `> sample_auth.log` silently writes UTF-16 instead of UTF-8)
+
+Optional: python generate_sample_log.py custom_name.log
 
 This gives the SIEM-lite dashboard real signal to detect on a fresh clone,
 without needing a live attacker VM.
 """
 import random
+import sys
 from datetime import datetime, timedelta
 
 random.seed(7)
@@ -57,4 +63,8 @@ lines.append(f"{fmt(off_hours_time)} {HOST} sshd[{random.randint(1000,9999)}]: A
 # Sort chronologically like a real log file would be
 lines.sort()
 
-print("\n".join(lines))
+output_path = sys.argv[1] if len(sys.argv) > 1 else "sample_auth.log"
+with open(output_path, "w", encoding="utf-8", newline="\n") as f:
+    f.write("\n".join(lines) + "\n")
+
+print(f"Wrote {len(lines)} lines to {output_path}")

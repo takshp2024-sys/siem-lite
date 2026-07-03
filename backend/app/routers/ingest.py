@@ -43,7 +43,14 @@ def ingest_text(payload: dict, db: Session = Depends(get_db)):
 @router.post("/file")
 async def ingest_file(fmt: str = Form(...), file: UploadFile = File(...), db: Session = Depends(get_db)):
     """Ingest a log file upload (e.g. an auth.log export)."""
-    content = (await file.read()).decode("utf-8", errors="ignore")
+    raw = await file.read()
+    # Windows tools (notably PowerShell's `>` redirection) commonly write
+    # UTF-16 instead of UTF-8. Detect the BOM and decode correctly rather
+    # than silently mangling every line with errors="ignore".
+    if raw.startswith(b"\xff\xfe") or raw.startswith(b"\xfe\xff"):
+        content = raw.decode("utf-16")
+    else:
+        content = raw.decode("utf-8", errors="ignore")
     lines = content.splitlines()
 
     try:
