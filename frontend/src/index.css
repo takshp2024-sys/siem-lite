@@ -1,0 +1,79 @@
+/* ---------------------------------------------------------------
+   Design tokens — "threat board" direction.
+   Rationale: a SOC analyst reads this screen in a dim room, glancing
+   for signal, not scrolling to admire it. Graphite base (not pure
+   black) keeps long viewing comfortable; amber is the radar-scope
+   accent reserved for attention, not decoration. Severity color
+   coding is functional — it's the one piece of "color" allowed to
+   carry real meaning.
+------------------------------------------------------------------*/
+:root {
+  --bg: #0b0f14;
+  --surface: #121822;
+  --surface-raised: #171f2c;
+  --border: #232d3a;
+  --text: #dde4ec;
+  --text-muted: #7c8797;
+  --text-faint: #4c5766;
+
+  --accent: #f2a93c;       /* radar amber — signature color, used sparingly */
+  --accent-dim: #8a6425;
+
+  --sev-info: #5b7083;
+  --sev-low: #4c8dd9;
+  --sev-medium: #f2a93c;
+  --sev-high: #f0784a;
+  --sev-critical: #e6425a;
+
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-sans: "Inter", -apple-system, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+::selection {
+  background: var(--accent-dim);
+  color: var(--text);
+}
+
+/* subtle scanline texture on the whole app, evokes a radar/console
+   surface without any looping animation to distract from real data */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.012) 0px,
+    rgba(255, 255, 255, 0.012) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  z-index: 999;
+}
+
+a { color: inherit; }
+
+button {
+  font-family: var(--font-sans);
+  cursor: pointer;
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-faint); }

@@ -1,0 +1,21 @@
+services:
+  backend:
+    build: ./backend
+    container_name: siem-lite-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - siem-data:/app/data
+    environment:
+      - DATABASE_URL=sqlite:///./data/siem.db
+
+  frontend:
+    build: ./frontend
+    container_name: siem-lite-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  siem-data:
